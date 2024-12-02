@@ -63,7 +63,7 @@ public class DeviceDataListener {
         // Build SubscriberConfig with topic and subscriber name
         final SubscriberConfig config = SubscriberConfig.subscriberConfig()
                 .topic(topic)
-                .subscriber(configProperties.getTenant() + "Subscriber2")
+                .subscriber(configProperties.getTenant() + "Subscriber")
                 .build();
 
         log.info("building subscriber");
