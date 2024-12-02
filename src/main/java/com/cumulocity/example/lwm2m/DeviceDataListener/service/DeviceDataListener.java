@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Service
 public class DeviceDataListener {
-    private static final String topic = "lwm2m/deviceData";
+    private static final String topic = "lwm2m/data";
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final ConfigProperties configProperties;
