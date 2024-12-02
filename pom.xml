@@ -90,17 +90,21 @@
 			<artifactId>jersey-bom</artifactId>
 			<version>2.35</version>
 			<type>pom</type>
-			<scope>import</scope>
+<!--			<scope>import</scope>-->
 		</dependency>
 
 		<dependency>
-			<groupId>org.eclipse.leshan</groupId>
-			<artifactId>leshan-core</artifactId>
-			<version>${eclipse.leshan.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.15.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsonschema2pojo</groupId>
+			<artifactId>jsonschema2pojo-core</artifactId>
+			<version>1.1.1</version>
 		</dependency>
 	</dependencies>
-
-
 
 	<build>
 		<plugins>
@@ -108,25 +112,23 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 			<plugin>
-				<groupId>com.nsn.cumulocity.clients-java</groupId>
-				<artifactId>microservice-package-maven-plugin</artifactId>
-				<version>${c8y.clients.version}</version>
+				<groupId>org.jsonschema2pojo</groupId>
+				<artifactId>jsonschema2pojo-maven-plugin</artifactId>
+				<version>1.1.1</version>
 				<executions>
 					<execution>
-						<id>package</id>
-						<phase>package</phase>
 						<goals>
-							<goal>package</goal>
+							<goal>generate</goal>
 						</goals>
-						<configuration>
-							<name>test-device-data-listener</name>
-							<image>test-device-data-listener</image>
-							<encoding>UTF-8</encoding>
-							<rpmSkip>true</rpmSkip>
-						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<sourceDirectory>${project.basedir}/src/main/resources/schemas</sourceDirectory>
+					<targetPackage>com.cumulocity.example.lwm2m.DeviceDataListener.lwm2m</targetPackage>
+					<useTitleAsClassname>true</useTitleAsClassname>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

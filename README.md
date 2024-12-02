@@ -16,7 +16,7 @@ You can assign these roles manually via API calls:
 
 For `ROLE_MQTT_SERVICE_ADMIN`:
 ```bash
-curl --location '<BASE_URL>/user/<tenant>/users/<user>/roles' \
+curl --location --request POST '<BASE_URL>/user/<tenant>/users/<user>/roles' \
 --header 'Authorization: Basic <KEY>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -29,7 +29,7 @@ curl --location '<BASE_URL>/user/<tenant>/users/<user>/roles' \
 
 For `ROLE_NOTIFICATION_2_ADMIN`:
 ```bash
-curl --location '<BASE_URL>/user/<tenant>/users/<user>/roles' \
+curl --location --request POST '<BASE_URL>/user/<tenant>/users/<user>/roles' \
 --header 'Authorization: Basic <KEY>' \
 --header 'Content-Type: application/json' \
 --data '{

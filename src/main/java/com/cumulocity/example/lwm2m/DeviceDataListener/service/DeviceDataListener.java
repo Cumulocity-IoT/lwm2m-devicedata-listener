@@ -1,7 +1,8 @@
 package com.cumulocity.example.lwm2m.DeviceDataListener.service;
 
 import com.cumulocity.example.lwm2m.DeviceDataListener.config.ConfigProperties;
-import c8y.lwm2m.commons.messaging.devicedata.TimestampedDeviceData;
+import com.cumulocity.example.lwm2m.DeviceDataListener.deserializer.MqttMessageDeserializer;
+import com.cumulocity.example.lwm2m.DeviceDataListener.lwm2m.Data;
 import com.cumulocity.model.authentication.CumulocityCredentialsFactory;
 import com.cumulocity.mqtt.service.sdk.MqttServiceApi;
 import com.cumulocity.mqtt.service.sdk.listener.MessageListener;
@@ -17,16 +18,14 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
 public class DeviceDataListener {
-    private static final String topic = "deviceReadData";
+    private static final String topic = "lwm2m/deviceData";
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final ConfigProperties configProperties;
@@ -35,13 +34,15 @@ public class DeviceDataListener {
     private Subscriber subscriber;
 
     private final Platform platform;
+    private final MqttMessageDeserializer mqttMessageDeserializer;
 
     @Autowired
     public DeviceDataListener(ConfigProperties configProperties) {
         this.configProperties = configProperties;
 
-        log.info("setting up platform");
+        mqttMessageDeserializer = new MqttMessageDeserializer();
 
+        log.info("setting up platform");
         platform = PlatformBuilder.platform()
                 .withBaseUrl(configProperties.getBaseUrl())
                 .withCredentials(new CumulocityCredentialsFactory().withTenant(configProperties.getTenant())
@@ -62,7 +63,7 @@ public class DeviceDataListener {
         // Build SubscriberConfig with topic and subscriber name
         final SubscriberConfig config = SubscriberConfig.subscriberConfig()
                 .topic(topic)
-                .subscriber(configProperties.getTenant() + "Subscriber")
+                .subscriber(configProperties.getTenant() + "Subscriber2")
                 .build();
 
         log.info("building subscriber");
@@ -75,11 +76,10 @@ public class DeviceDataListener {
             @Override
             public void onMessage(MqttServiceMessage mqttServiceMessage) {
                 log.info("received message");
-                try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(mqttServiceMessage.getPayload());
-                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
-                    TimestampedDeviceData timestampedDeviceData = (TimestampedDeviceData)objectInputStream.readObject();
-                    log.info(timestampedDeviceData.toString());
-                } catch (IOException | ClassNotFoundException e) {
+                try {
+                    Data lwm2mData = mqttMessageDeserializer.deserialize(mqttServiceMessage.getPayload(), Data.class);
+                    log.info("Deserialized deviceData: {}", lwm2mData);
+                } catch (IOException e) {
                     log.error("failed to read the device payload", e);
                 }
             }

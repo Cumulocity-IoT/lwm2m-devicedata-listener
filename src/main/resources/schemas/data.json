@@ -1,0 +1,77 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "type" : "object",
+  "properties" : {
+    "deviceId" : {
+      "type" : "string"
+    },
+    "lwm2mEndpoint" : {
+      "type" : "string"
+    },
+    "registrationId" : {
+      "type" : "string",
+      "description" : "LWM2M registration scope in which data has been received"
+    },
+    "senMLMessage" : {
+      "description" : "A SenML-JSON representation of the data received from the device",
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "properties" : {
+          "bn" : {
+            "type" : "string",
+            "description" : "The base name string which is prepended to the Name value of the entry for forming a globally unique identifier for the resource."
+          },
+          "bt" : {
+            "type" : "integer",
+            "description" : "The base time which the Time values are relative to."
+          },
+          "n" : {
+            "type" : "string",
+            "description" : "The Name value is prepended by the Base Name value to form the name of the resource instance. The resulting name uniquely identifies the Resource Instance from all others. Example:\n• if Base Name is \"/\" , the Array entry Name of the Resource is {Object}/{Object Instance}/{Resource}/{Resource Instance}\n• When Base Name is not present, the Array entry Name is the full URI of the requested Resource Instance"
+          },
+          "t" : {
+            "type" : "integer",
+            "description" : "The time of the representation relative to the Base Time in seconds for a notification. Required only for historical representations."
+          },
+          "v" : {
+            "type" : "number",
+            "description" : "Value as a JSON float if the Resource data type is Integer, Float, or Time."
+          },
+          "vb" : {
+            "type" : "boolean",
+            "description" : "Value as a JSON Boolean if the Resource data type is boolean."
+          },
+          "vd" : {
+            "type" : "string",
+            "description" : "For Resource data type \"opaque\" this holds the Base64 encoded representation of the Resource.\n",
+            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          },
+          "vlo" : {
+            "type" : "string",
+            "description" : "Value as a JSON string if the Resource data type is Objlnk.\nFormat according to LWM2M 1.2 spec, Appendix C. Data Types (Normative) (e.g. \"10:03\").",
+            "pattern" : "\\d+:\\d+"
+          },
+          "vs" : {
+            "type" : "string",
+            "description" : "Value as a JSON string for all other Resource data types."
+          }
+        },
+        "description" : "This class models a SenML record according to the LWM2M 1.2 Core specification"
+      }
+    },
+    "sourceOfDataM" : {
+      "type" : "string",
+      "enum" : [ "READ_RESPONSE", "OBSERVATION_RESPONSE", "NOTIFICATION", "SEND" ],
+      "description" : "Describes how the the LWM2M data was received"
+    },
+    "tenantId" : {
+      "type" : "string"
+    },
+    "timestampDataReceived" : {
+      "type" : "string",
+      "description" : "Timestamp in ISO ZONED TIME format (ISO 8601). Example: 2024-11-21T14:24:51.136319Z"
+    }
+  },
+  "description" : "Models a set of LWM2M values that have been received by the LWM2M service"
+}
