@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Service
 public class DeviceDataListener {
-    private static final String topic = "lwm2m/data";
+    private static final String topic = "/lwm2m/data";
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final ConfigProperties configProperties;
@@ -78,7 +78,7 @@ public class DeviceDataListener {
                 log.info("received message");
                 try {
                     Data lwm2mData = mqttMessageDeserializer.deserialize(mqttServiceMessage.getPayload(), Data.class);
-                    log.info("Deserialized deviceData: {}", lwm2mData);
+                    log.info("Deserialized deviceData: {}", mqttMessageDeserializer.writeAsPrettyString(lwm2mData));
                 } catch (IOException e) {
                     log.error("failed to read the device payload", e);
                 }
