@@ -11,13 +11,13 @@ import com.cumulocity.mqtt.service.sdk.subscriber.Subscriber;
 import com.cumulocity.mqtt.service.sdk.subscriber.SubscriberConfig;
 import com.cumulocity.sdk.client.Platform;
 import com.cumulocity.sdk.client.PlatformBuilder;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
