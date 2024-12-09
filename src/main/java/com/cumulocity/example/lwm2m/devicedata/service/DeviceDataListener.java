@@ -77,7 +77,9 @@ public class DeviceDataListener {
      * @param topic The topic to which the tenant should be subscribed.
      */
     private void subcribeTenantForTopic(String tenant, String topic) {
-        String subscriberID = tenant + "Subscriber";
+        // Subscriber ID must be a unique name and should not overlap with another subscriber with the same ID
+        final String subscriberID = tenant + "LwM2mSubscriber";
+
         log.info("Configure MQTT Messaging Service subscriber for tenant '{}' to MQTT topic '{}' with Subscriber ID '{}'",
                 tenant, topic, subscriberID);
         // Build SubscriberConfig with topic and subscriber name
