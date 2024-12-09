@@ -5,8 +5,8 @@
 	<groupId>com.cumulocity.example.lwm2m</groupId>
 	<artifactId>lwm2m-devicedata</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lwm2m-devicedata-listener</name>
-<!--	<packaging>jar</packaging>-->
+	<name>lwm2m-devicedata</name>
+
 	<description>Demo Device-data listener</description>
 
 	<url/>
@@ -65,13 +65,11 @@
 		<dependency>
 			<groupId>com.nsn.cumulocity.clients-java</groupId>
 			<artifactId>microservice-autoconfigure</artifactId>
-<!--			<version>${c8y.clients.version}</version>-->
 		</dependency>
 
 		<dependency>
 			<groupId>com.nsn.cumulocity.clients-java</groupId>
 			<artifactId>java-client</artifactId>
-<!--			<version>${c8y.clients.version}</version>-->
 		</dependency>
 
 		<dependency>
@@ -169,8 +167,6 @@
 				</executions>
 			</plugin>
 
-
-
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.6</version>
@@ -201,12 +197,6 @@
 				<version>3.3.2</version>
 			</plugin>
 
-
-
-
-
-
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -230,7 +220,6 @@
 					<argLine>--debug</argLine>
 				</configuration>
 			</plugin>
-
 
 			<plugin>
 				<groupId>org.jsonschema2pojo</groupId>
@@ -262,8 +251,6 @@
 							<goal>package</goal>
 						</goals>
 						<configuration>
-							<name>lwm2m-devicedata-listener</name>
-							<image>lwm2m-devicedata-listener</image>
 							<encoding>UTF-8</encoding>
 							<rpmSkip>true</rpmSkip>
 							<heap>
