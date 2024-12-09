@@ -20,7 +20,6 @@
 	</scm>
 
 	<properties>
-		<c8y.version>1016.0.117</c8y.version>
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<c8y.clients.version>1020.155.0</c8y.clients.version>
