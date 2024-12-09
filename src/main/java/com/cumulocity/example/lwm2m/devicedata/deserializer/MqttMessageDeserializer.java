@@ -1,4 +1,4 @@
-package com.cumulocity.example.lwm2m.DeviceDataListener.deserializer;
+package com.cumulocity.example.lwm2m.devicedata.deserializer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

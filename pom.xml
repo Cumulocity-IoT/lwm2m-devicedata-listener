@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cumulocity.example.lwm2m</groupId>
-	<artifactId>DeviceDataListener</artifactId>
+	<artifactId>lwm2m-devicedata</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>DeviceDataListener</name>
+	<name>lwm2m-devicedata-listener</name>
 <!--	<packaging>jar</packaging>-->
 	<description>Demo Device-data listener</description>
 
@@ -34,9 +34,8 @@
 		<jsonschema2pojo.version>1.1.1</jsonschema2pojo.version>
 		<fasterxml.jackson.version>2.15.2</fasterxml.jackson.version>
 		<glassfish.jersey.version>3.0.14</glassfish.jersey.version>
-		<service.main.class>com.cumulocity.example.lwm2m.DeviceDataListener.DeviceDataListenerApplication</service.main.class>
+		<service.main.class>com.cumulocity.example.lwm2m.devicedata.DeviceDataListenerApplication</service.main.class>
 	</properties>
-
 
 	<dependencyManagement>
 		<dependencies>
@@ -225,7 +224,13 @@
 				</configuration>
 			</plugin>
 
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>--debug</argLine>
+				</configuration>
+			</plugin>
 
 
 			<plugin>
@@ -241,7 +246,7 @@
 				</executions>
 				<configuration>
 					<sourceDirectory>${project.basedir}/src/main/resources/schemas</sourceDirectory>
-					<targetPackage>com.cumulocity.example.lwm2m.DeviceDataListener.lwm2m</targetPackage>
+					<targetPackage>com.cumulocity.example.lwm2m.devicedata.lwm2m</targetPackage>
 					<useTitleAsClassname>true</useTitleAsClassname>
 				</configuration>
 			</plugin>
@@ -249,6 +254,7 @@
 			<plugin>
 				<groupId>com.nsn.cumulocity.clients-java</groupId>
 				<artifactId>microservice-package-maven-plugin</artifactId>
+				<version>${c8y.microservice.version}</version>
 				<executions>
 					<execution>
 						<id>package</id>

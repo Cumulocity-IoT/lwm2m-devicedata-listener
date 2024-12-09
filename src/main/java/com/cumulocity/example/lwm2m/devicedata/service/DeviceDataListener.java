@@ -1,8 +1,12 @@
-package com.cumulocity.example.lwm2m.DeviceDataListener.service;
+package com.cumulocity.example.lwm2m.devicedata.service;
 
-import com.cumulocity.example.lwm2m.DeviceDataListener.config.ConfigProperties;
-import com.cumulocity.example.lwm2m.DeviceDataListener.deserializer.MqttMessageDeserializer;
-import com.cumulocity.example.lwm2m.DeviceDataListener.lwm2m.Data;
+import com.cumulocity.example.lwm2m.devicedata.config.ApplicationPropertiesConfig;
+import com.cumulocity.example.lwm2m.devicedata.deserializer.MqttMessageDeserializer;
+import com.cumulocity.example.lwm2m.devicedata.lwm2m.Data;
+import com.cumulocity.microservice.context.credentials.MicroserviceCredentials;
+import com.cumulocity.microservice.subscription.model.MicroserviceSubscriptionAddedEvent;
+import com.cumulocity.microservice.subscription.model.MicroserviceSubscriptionRemovedEvent;
+import com.cumulocity.microservice.subscription.model.MicroserviceSubscriptionsInitializedEvent;
 import com.cumulocity.model.authentication.CumulocityCredentialsFactory;
 import com.cumulocity.mqtt.service.sdk.MqttServiceApi;
 import com.cumulocity.mqtt.service.sdk.listener.MessageListener;
@@ -11,10 +15,10 @@ import com.cumulocity.mqtt.service.sdk.subscriber.Subscriber;
 import com.cumulocity.mqtt.service.sdk.subscriber.SubscriberConfig;
 import com.cumulocity.sdk.client.Platform;
 import com.cumulocity.sdk.client.PlatformBuilder;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -27,43 +31,70 @@ import java.util.concurrent.Executors;
 public class DeviceDataListener {
     private static final String topic = "/lwm2m/data";
 
+    @Autowired
+    private Platform platform;
+
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private final ConfigProperties configProperties;
+
+    @Autowired
+    private ApplicationPropertiesConfig applicationPropertiesConfig;
 
     private MqttServiceApi mqttServiceApi;
     private Subscriber subscriber;
 
-    private final Platform platform;
-    private final MqttMessageDeserializer mqttMessageDeserializer;
+    private static MicroserviceCredentials microserviceCredentials;
+    private static boolean isMicroserviceSubscribed = true;
 
-    @Autowired
-    public DeviceDataListener(ConfigProperties configProperties) {
-        this.configProperties = configProperties;
+    private final MqttMessageDeserializer mqttMessageDeserializer = new MqttMessageDeserializer();
 
-        mqttMessageDeserializer = new MqttMessageDeserializer();
+    @EventListener(MicroserviceSubscriptionAddedEvent.class)
+    public void onMicroserviceSubscriptionAdded(MicroserviceSubscriptionAddedEvent event) {
+        this.microserviceCredentials = event.getCredentials();
+        log.info("This mircoservice is subscribed for tenant {}",microserviceCredentials.getTenant());
+        createListener(microserviceCredentials);
+    }
 
+    @EventListener(MicroserviceSubscriptionsInitializedEvent.class)
+    public void onMicroserviceSubscriptionInit() {
+        log.info("This mircoservice is initialized for tenant {}",microserviceCredentials.getTenant());
+        this.isMicroserviceSubscribed = true;
+    }
+
+    @EventListener(MicroserviceSubscriptionRemovedEvent.class)
+    public void MicroserviceSubscriptionRemoved(MicroserviceSubscriptionRemovedEvent event) {
+        if (!isMicroserviceSubscribed) {
+            return;
+        }
+
+        this.microserviceCredentials = null;
+        log.debug("This mircoservice is unsubscribed for tenant {}", event.getTenant());
+    }
+
+
+    private void setupPlatform(MicroserviceCredentials microserviceCredentials) {
         log.info("setting up platform");
         platform = PlatformBuilder.platform()
-                .withBaseUrl(configProperties.getBaseUrl())
-                .withCredentials(new CumulocityCredentialsFactory().withTenant(configProperties.getTenant())
-                        .withUsername(configProperties.getUsername())
-                        .withPassword(configProperties.getPassword())
+                .withBaseUrl(applicationPropertiesConfig.getProperties().getBaseUrl())
+                .withCredentials(new CumulocityCredentialsFactory()
+                        .withTenant(microserviceCredentials.getTenant())
+                        .withUsername(microserviceCredentials.getUsername())
+                        .withPassword(microserviceCredentials.getPassword())
                         .getCredentials())
                 .build();
     }
 
-    @PostConstruct
-    public void createListener() {
+    public void createListener(MicroserviceCredentials microserviceCredentials) {
+        setupPlatform(microserviceCredentials);
         log.info("setting up service api");
         mqttServiceApi = MqttServiceApi.webSocket()
-                .url(configProperties.getMessagingServiceUrl())
+                .url(applicationPropertiesConfig.getProperties().getMessagingServiceUrl())
                 .tokenApi(platform.getTokenApi())
                 .build();
 
         // Build SubscriberConfig with topic and subscriber name
         final SubscriberConfig config = SubscriberConfig.subscriberConfig()
                 .topic(topic)
-                .subscriber(configProperties.getTenant() + "Subscriber")
+                .subscriber(microserviceCredentials.getTenant() + "Subscriber")
                 .build();
 
         log.info("building subscriber");
