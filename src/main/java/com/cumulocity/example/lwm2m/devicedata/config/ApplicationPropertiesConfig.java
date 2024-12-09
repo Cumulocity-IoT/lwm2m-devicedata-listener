@@ -15,8 +15,11 @@ public class ApplicationPropertiesConfig {
     @Value("${C8Y.baseURL.mqtt}")
     private String messagingServiceUrl;
 
+    @Value("${C8Y.mqtt.topic}")
+    private String messagingServiceTopic;
+
     @Bean
     public ApplicationProperties getProperties() {
-        return new ApplicationProperties(applicationName, baseUrl, messagingServiceUrl);
+        return new ApplicationProperties(applicationName, baseUrl, messagingServiceUrl, messagingServiceTopic);
     }
 }
