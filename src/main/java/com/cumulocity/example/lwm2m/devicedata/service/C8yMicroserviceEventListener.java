@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.net.MalformedURLException;
+
 @Component
 @Slf4j
 public class C8yMicroserviceEventListener {
@@ -41,7 +43,7 @@ public class C8yMicroserviceEventListener {
      * @param event
      */
     @EventListener(MicroserviceSubscriptionAddedEvent.class)
-    public void onMicroserviceSubscriptionAdded(MicroserviceSubscriptionAddedEvent event) {
+    public void onMicroserviceSubscriptionAdded(MicroserviceSubscriptionAddedEvent event) throws MalformedURLException {
         microserviceCredentials = event.getCredentials();
         log.info("This microservice is subscribed for tenant {}",microserviceCredentials.getTenant());
         deviceDataListener.init(microserviceCredentials);

@@ -19,6 +19,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -62,9 +64,14 @@ public class DeviceDataListener {
      * receive MQTT messages. This setup ensures that the microservice can communicate
      * effectively over MQTT and interact with the subscribed topics.
      */
-    private void setupMqttMessagingServiceAPI() {
+    private void setupMqttMessagingServiceAPI() throws MalformedURLException {
+        URL url = new URL(applicationPropertiesConfig.getProperties().getBaseUrl());
+        String mqttWsUrl = applicationPropertiesConfig.getProperties().getMessagingServiceProtocol() + url.getHost();
+
+        log.info("MQTT Service websocket URL: {}", mqttWsUrl);
+
         mqttServiceApi = MqttServiceApi.webSocket()
-                .url(applicationPropertiesConfig.getProperties().getMessagingServiceUrl())
+                .url(mqttWsUrl)
                 .tokenApi(platform.getTokenApi())
                 .build();
     }
@@ -119,7 +126,7 @@ public class DeviceDataListener {
      *                                and authorization when interacting with the
      *                                platform or services.
      */
-    public void init(MicroserviceCredentials microserviceCredentials) {
+    public void init(MicroserviceCredentials microserviceCredentials) throws MalformedURLException {
         setupPlatform(microserviceCredentials);
 
         log.info("Setting up MQTT Messaging Service API");

@@ -13,20 +13,20 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplicationProperties {
     private String applicationName;
     private String baseUrl;
-    private String messagingServiceUrl;
+    private String messagingServiceProtocol;
     private String messagingServiceTopic;
 
-    public ApplicationProperties(String applicationName, String baseUrl, String messagingServiceUrl) {
+    public ApplicationProperties(String applicationName, String baseUrl, String messagingServiceProtocol) {
         this.applicationName = applicationName;
         this.baseUrl = baseUrl;
-        this.messagingServiceUrl = messagingServiceUrl;
+        this.messagingServiceProtocol = messagingServiceProtocol;
     }
 
     @PostConstruct
     public void printGatewayInformation() {
         log.info("============================== Application Properties ==================================");
         log.info("Platform URL: {}", baseUrl);
-        log.info("Messaging Service URL: {}", messagingServiceUrl);
+        log.info("Messaging Service Protocol: {}", messagingServiceProtocol);
         log.info("Messaging Service Topic: {}", messagingServiceTopic);
         log.info("========================================================================================");
     }
