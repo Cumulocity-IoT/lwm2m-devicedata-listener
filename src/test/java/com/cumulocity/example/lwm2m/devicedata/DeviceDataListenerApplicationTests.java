@@ -1,4 +1,4 @@
-package com.cumulocity.example.lwm2m.DeviceDataListener;
+package com.cumulocity.example.lwm2m.devicedata;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
