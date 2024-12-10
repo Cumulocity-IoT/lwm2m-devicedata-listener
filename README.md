@@ -14,7 +14,8 @@ To build and run the project:
 1. **Build the Project:** Run `mvn clean install` to compile and package the JAR file.
 2. **Apply Custom Configuration:** No custom configuration needed when the microservice application is uploaded from the Administration application in Cumulocity platform.
 If this is being run locally for development, modify the default settings by editing the `src/main/resources/application-default.properties` file. Set the `C8Y.baseURL` to the appropriate Cumulocity platform URL.
-3. **Run the Microservice:** To execute the microservice, use the microservice deployer to upload the built `lwm2m-devicedata-listener-<version>-SNAPSHOT.zip` file. The microservice uses the credentials of the tenant and user who deploys it.
+3. **Run the Microservice:** Upload the built `lwm2m-devicedata-<version>-SNAPSHOT.zip` file from the Administration application in Cumulocity platform as described in https://cumulocity.com/docs/standard-tenant/ecosystem/#managing-microservices.
+The logs can be viewed from the application's Logs tab.
 
 ### User Roles Setup for Listener
 **Ensure Correct Roles Are Assigned:** To ensure the listener functions correctly, make sure the following roles are assigned to your microservice, as defined in the `cumulocity.json` file:
