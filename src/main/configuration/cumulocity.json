@@ -1,0 +1,33 @@
+{
+  "apiVersion": "2",
+  "version": "@project.version@",
+  "provider": {
+    "name": "Cumulocity GmbH"
+  },
+  "isolation": "PER_TENANT",
+  "requiredRoles": [
+    "ROLE_INVENTORY_READ",
+    "ROLE_NOTIFICATION_2_ADMIN",
+    "ROLE_MQTT_SERVICE_ADMIN"  ],
+  "roles": [
+  ],
+  "resources": {
+    "memory": "1G"
+  },
+  "livenessProbe": {
+    "httpGet": {
+      "path": "/health",
+      "port": 80
+    },
+    "initialDelaySeconds": 200,
+    "periodSeconds": 10
+  },
+  "readinessProbe": {
+    "httpGet": {
+      "path": "/health",
+      "port": 80
+    },
+    "initialDelaySeconds": 220,
+    "periodSeconds": 10
+  }
+}

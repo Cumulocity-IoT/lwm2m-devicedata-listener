@@ -2,42 +2,60 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.9</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
 	<groupId>com.cumulocity.example.lwm2m</groupId>
-	<artifactId>DeviceDataListener </artifactId>
+	<artifactId>lwm2m-devicedata</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>DeviceDataListener </name>
+	<name>lwm2m-devicedata</name>
+
 	<description>Demo Device-data listener</description>
 
 	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
+	<licenses><license/></licenses>
+	<developers><developer/></developers>
 	<scm>
 		<connection/>
 		<developerConnection/>
 		<tag/>
 		<url/>
 	</scm>
+
 	<properties>
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<c8y.clients.version>1020.125.0</c8y.clients.version>
+		<c8y.clients.version>1020.155.0</c8y.clients.version>
 		<c8y.microservice.version>${c8y.clients.version}</c8y.microservice.version>
 		<lombok.version>1.18.34</lombok.version>
 		<eclipse.leshan.version>2.0.0-M9</eclipse.leshan.version>
 		<pulsar.client.version>2.5.2</pulsar.client.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<spring-boot-dependencies.version>2.5.14</spring-boot-dependencies.version>
+		<jsonschema2pojo.version>1.1.1</jsonschema2pojo.version>
+		<fasterxml.jackson.version>2.15.2</fasterxml.jackson.version>
+		<glassfish.jersey.version>3.0.14</glassfish.jersey.version>
+		<service.main.class>com.cumulocity.example.lwm2m.devicedata.DeviceDataListenerApplication</service.main.class>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.nsn.cumulocity.clients-java</groupId>
+				<artifactId>microservice-dependencies</artifactId>
+				<version>${c8y.microservice.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey</groupId>
+				<artifactId>jersey-bom</artifactId>
+				<version>${glassfish.jersey.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -45,21 +63,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>com.nsn.cumulocity.clients-java</groupId>
+			<artifactId>microservice-autoconfigure</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>com.nsn.cumulocity.clients-java</groupId>
-			<artifactId>microservice-autoconfigure</artifactId>
-			<version>${c8y.clients.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.nsn.cumulocity.clients-java</groupId>
 			<artifactId>java-client</artifactId>
-			<version>${c8y.clients.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.cumulocity.sdk.mqtt</groupId>
 			<artifactId>mqtt-service-model</artifactId>
@@ -72,13 +84,31 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
-			<scope>provided</scope>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${fasterxml.jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${fasterxml.jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${fasterxml.jackson.version}</version>
 		</dependency>
 
-<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.apache.pulsar/pulsar-client &ndash;&gt;-->
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>2.1.1</version> <!-- Or the latest version -->
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.pulsar</groupId>
 			<artifactId>pulsar-client</artifactId>
@@ -86,32 +116,133 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.glassfish.jersey</groupId>
-			<artifactId>jersey-bom</artifactId>
-			<version>2.35</version>
-			<type>pom</type>
-			<scope>import</scope>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
+		<!-- JsonSchema to POJO-->
 		<dependency>
-			<groupId>org.eclipse.leshan</groupId>
-			<artifactId>leshan-core</artifactId>
-			<version>${eclipse.leshan.version}</version>
+			<groupId>org.jsonschema2pojo</groupId>
+			<artifactId>jsonschema2pojo-core</artifactId>
+			<version>${jsonschema2pojo.version}</version>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
-
+	<profiles>
+		<profile>
+			<id>java17+</id>
+			<activation>
+				<jdk>[17,)</jdk>
+			</activation>
+		</profile>
+	</profiles>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.2</version>
+			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot-dependencies.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>${service.main.class}</mainClass>
+				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>--debug</argLine>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jsonschema2pojo</groupId>
+				<artifactId>jsonschema2pojo-maven-plugin</artifactId>
+				<version>1.1.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDirectory>${project.basedir}/src/main/resources/schemas</sourceDirectory>
+					<targetPackage>com.cumulocity.example.lwm2m.devicedata.lwm2m</targetPackage>
+					<useTitleAsClassname>true</useTitleAsClassname>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>com.nsn.cumulocity.clients-java</groupId>
 				<artifactId>microservice-package-maven-plugin</artifactId>
-				<version>${c8y.clients.version}</version>
+				<version>${c8y.microservice.version}</version>
 				<executions>
 					<execution>
 						<id>package</id>
@@ -120,10 +251,16 @@
 							<goal>package</goal>
 						</goals>
 						<configuration>
-							<name>test-device-data-listener</name>
-							<image>test-device-data-listener</image>
 							<encoding>UTF-8</encoding>
 							<rpmSkip>true</rpmSkip>
+							<heap>
+								<min>256m</min>
+								<max>768m</max>
+							</heap>
+							<metaspace>
+								<min>128m</min>
+								<max>192m</max>
+							</metaspace>
 						</configuration>
 					</execution>
 				</executions>
@@ -131,4 +268,17 @@
 		</plugins>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>cumulocity</id>
+			<layout>default</layout>
+			<url>https://download.cumulocity.com/maven/repository</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public</id>
+			<url>https://download.cumulocity.com/maven/repository</url>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
