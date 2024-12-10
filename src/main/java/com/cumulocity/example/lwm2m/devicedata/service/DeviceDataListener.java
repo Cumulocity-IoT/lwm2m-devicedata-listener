@@ -2,7 +2,7 @@ package com.cumulocity.example.lwm2m.devicedata.service;
 
 import com.cumulocity.example.lwm2m.devicedata.config.ApplicationPropertiesConfig;
 import com.cumulocity.example.lwm2m.devicedata.deserializer.MqttMessageDeserializer;
-import com.cumulocity.example.lwm2m.devicedata.lwm2m.Data;
+import com.cumulocity.example.lwm2m.devicedata.lwm2m.LWM2MDataMessageSchema;
 import com.cumulocity.microservice.context.credentials.MicroserviceCredentials;
 import com.cumulocity.model.authentication.CumulocityCredentialsFactory;
 import com.cumulocity.mqtt.service.sdk.MqttServiceApi;
@@ -106,7 +106,7 @@ public class DeviceDataListener {
             public void onMessage(MqttServiceMessage mqttServiceMessage) {
                 log.info("Received MQTT Messaging Service message");
                 try {
-                    Data lwm2mData = mqttMessageDeserializer.deserialize(mqttServiceMessage.getPayload(), Data.class);
+                    LWM2MDataMessageSchema lwm2mData = mqttMessageDeserializer.deserialize(mqttServiceMessage.getPayload(), LWM2MDataMessageSchema.class);
                     log.info("Deserialized deviceData: {}", mqttMessageDeserializer.writeAsPrettyString(lwm2mData));
                 } catch (IOException e) {
                     log.error("Failed to read the MQTT Messaging Service device payload", e);
