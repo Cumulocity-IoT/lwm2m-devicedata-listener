@@ -16,51 +16,116 @@
       "description" : "A SenML-JSON representation of the data received from the device",
       "type" : "array",
       "items" : {
-        "type" : "object",
-        "properties" : {
-          "bn" : {
-            "type" : "string",
-            "description" : "The base name string which is prepended to the Name value of the entry for forming a globally unique identifier for the resource."
+        "anyOf" : [ {
+          "type" : "object",
+          "properties" : {
+            "bn" : {
+              "type" : "string"
+            },
+            "bt" : {
+              "type" : "integer"
+            },
+            "n" : {
+              "type" : "string"
+            },
+            "t" : {
+              "type" : "integer"
+            },
+            "vb" : {
+              "type" : "boolean",
+              "description" : "SenML binary value"
+            }
           },
-          "bt" : {
-            "type" : "integer",
-            "description" : "The base time which the Time values are relative to."
+          "description" : "A class modelling a boolean in SenML"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "bn" : {
+              "type" : "string"
+            },
+            "bt" : {
+              "type" : "integer"
+            },
+            "n" : {
+              "type" : "string"
+            },
+            "t" : {
+              "type" : "integer"
+            },
+            "v" : {
+              "type" : "number",
+              "description" : "SenML float value"
+            }
           },
-          "n" : {
-            "type" : "string",
-            "description" : "The Name value is prepended by the Base Name value to form the name of the resource instance. The resulting name uniquely identifies the Resource Instance from all others. Example:\n• if Base Name is \"/\" , the Array entry Name of the Resource is {Object}/{Object Instance}/{Resource}/{Resource Instance}\n• When Base Name is not present, the Array entry Name is the full URI of the requested Resource Instance"
+          "description" : "A class modelling a JSON Float in SenML"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "bn" : {
+              "type" : "string"
+            },
+            "bt" : {
+              "type" : "integer"
+            },
+            "n" : {
+              "type" : "string"
+            },
+            "t" : {
+              "type" : "integer"
+            },
+            "vd" : {
+              "type" : "string",
+              "description" : "SenML Opaque Value in Base64",
+              "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+            }
           },
-          "t" : {
-            "type" : "integer",
-            "description" : "The time of the representation relative to the Base Time in seconds for a notification. Required only for historical representations."
-          },
-          "v" : {
-            "type" : "number",
-            "description" : "Value as a JSON float if the Resource data type is Integer, Float, or Time."
-          },
-          "vb" : {
-            "type" : "boolean",
-            "description" : "Value as a JSON Boolean if the Resource data type is boolean."
-          },
-          "vd" : {
-            "type" : "string",
-            "description" : "For Resource data type \"opaque\" this holds the Base64 encoded representation of the Resource.\n",
-            "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
-          },
-          "vlo" : {
-            "type" : "string",
-            "description" : "Value as a JSON string if the Resource data type is Objlnk.\nFormat according to LWM2M 1.2 spec, Appendix C. Data Types (Normative) (e.g. \"10:03\").",
-            "pattern" : "\\d+:\\d+"
-          },
-          "vs" : {
-            "type" : "string",
-            "description" : "Value as a JSON string for all other Resource data types."
+          "description" : "A JSON class modelling OPAQUE data"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "bn" : {
+              "type" : "string"
+            },
+            "bt" : {
+              "type" : "integer"
+            },
+            "n" : {
+              "type" : "string"
+            },
+            "t" : {
+              "type" : "integer"
+            },
+            "vs" : {
+              "type" : "string",
+              "description" : "SenML String value"
+            }
           }
-        },
-        "description" : "This class models a SenML record according to the LWM2M 1.2 Core specification"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "bn" : {
+              "type" : "string"
+            },
+            "bt" : {
+              "type" : "integer"
+            },
+            "n" : {
+              "type" : "string"
+            },
+            "t" : {
+              "type" : "integer"
+            },
+            "vlo" : {
+              "type" : "string",
+              "description" : "SenML Object Link",
+              "pattern" : "\\d+:\\d+"
+            }
+          },
+          "description" : "A JSON class modelling an Object Link Property"
+        } ]
       }
     },
-    "sourceOfDataM" : {
+    "sourceOfData" : {
       "type" : "string",
       "enum" : [ "READ_RESPONSE", "OBSERVATION_RESPONSE", "NOTIFICATION", "SEND" ],
       "description" : "Describes how the the LWM2M data was received"
