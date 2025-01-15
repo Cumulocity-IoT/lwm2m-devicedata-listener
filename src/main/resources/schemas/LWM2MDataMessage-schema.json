@@ -23,13 +23,13 @@
               "type" : "string"
             },
             "bt" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "n" : {
               "type" : "string"
             },
             "t" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "vb" : {
               "type" : "boolean",
@@ -44,13 +44,13 @@
               "type" : "string"
             },
             "bt" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "n" : {
               "type" : "string"
             },
             "t" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "v" : {
               "type" : "number",
@@ -65,13 +65,13 @@
               "type" : "string"
             },
             "bt" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "n" : {
               "type" : "string"
             },
             "t" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "vd" : {
               "type" : "string",
@@ -87,13 +87,13 @@
               "type" : "string"
             },
             "bt" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "n" : {
               "type" : "string"
             },
             "t" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "vs" : {
               "type" : "string",
@@ -107,13 +107,13 @@
               "type" : "string"
             },
             "bt" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "n" : {
               "type" : "string"
             },
             "t" : {
-              "type" : "integer"
+              "type" : "number"
             },
             "vlo" : {
               "type" : "string",
