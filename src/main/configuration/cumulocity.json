@@ -7,8 +7,7 @@
   "isolation": "PER_TENANT",
   "requiredRoles": [
     "ROLE_INVENTORY_READ",
-    "ROLE_NOTIFICATION_2_ADMIN",
-    "ROLE_MQTT_SERVICE_ADMIN"  ],
+    "ROLE_NOTIFICATION_2_ADMIN"  ],
   "roles": [
   ],
   "resources": {

@@ -21,4 +21,3 @@ The logs can be viewed from the application's Logs tab.
 **Ensure Correct Roles Are Assigned:** To ensure the listener functions correctly, make sure the following roles are assigned to your microservice, as defined in the `cumulocity.json` file:
 - `ROLE_INVENTORY_READ`
 - `ROLE_NOTIFICATION_2_ADMIN`
-- `ROLE_MQTT_SERVICE_ADMIN`
